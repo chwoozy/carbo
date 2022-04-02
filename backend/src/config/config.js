@@ -11,6 +11,7 @@ const config = {
 	host: process.env.DB_HOST,
 	dialect: 'postgres',
 	port: 5432,
+	ssl: true,
 };
 
 if (env === 'production') {
