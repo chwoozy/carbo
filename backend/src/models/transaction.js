@@ -17,7 +17,7 @@ module.exports = (sequelize, DataTypes) => {
 		{
 			type: DataTypes.TEXT,
 			supply_carbon_metadata_id: DataTypes.INTEGER,
-			ghg_id: DataTypes.INTEGER,
+			nft_address: DataTypes.TEXT,
 		},
 		{
 			sequelize,
