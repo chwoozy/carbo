@@ -3,7 +3,9 @@ import { styled } from '@stitches/react';
 export const StyledBreadCrumbs = styled('div', {
 	display: 'flex',
 	flexDirection: 'row',
-	alignItems: 'center',
+	alignItems: 'flex-end',
+	justifyContent: 'flex-end',
+	height: '25px',
 	fontWeight: '$bold',
 
 	div: {

@@ -10,13 +10,16 @@ import styles from './index.module.scss';
 
 /* Components */
 import PageHeader from '../../components/PageHeader';
-import OrdersTable from '../../containers/OrdersPage/OrdersTable';
+import OrdersTable from '../../containers/Dashboard/OrdersTable';
 import CTAButton from '../../components/CTAButton';
 import TabsWrapper from '../../components/TabsWrapper';
+import SmallGraph from '../../components/SmallGraph';
+import Graphs from '../../containers/Dashboard/Graphs';
 
 /* Data */
 import { campaigns } from '../../consts/brandCampaigns';
 import axios from 'axios';
+import StatBox from '../../components/StatBox';
 
 const OrdersPage = () => {
 	const [selectedTabList, setSelectedTabList] = React.useState<number>(0);
@@ -39,48 +42,7 @@ const OrdersPage = () => {
 					]}
 					callToAction=""
 				/>
-				<div className={styles.campaignPageHeaderRow}>
-					<h2 className={styles.pageTitle}> Orders </h2>
-					<div className={styles.buttonsRow}>
-						<CTAButton
-							colorScheme="brand"
-							type="secondary"
-							size="tiny"
-							to="/brand/campaigns/new"
-							disabled
-						>
-							<i className="bx bxs-download"></i>
-							Export
-						</CTAButton>
-
-						{/* <CTAButton
-							colorScheme="brand"
-							type="primary"
-							size="tiny"
-							to="/brand/campaigns/new"
-						>
-							<i className="bx bx-plus"></i>
-							Create New
-						</CTAButton> */}
-					</div>
-				</div>
-				<TabsWrapper
-					handleTabChange={handleTabChange}
-					selectedTab={selectedTabList}
-					tabsDisplayList={['Active Orders', 'Closed Orders']}
-				>
-					{userData?.data && (<TabPanel>
-						<OrdersTable campaigns={userData.data.filter(
-							(campaign: any) => campaign.status === 'Active'
-						)} />
-					</TabPanel>)}
-					
-					{userData?.data && (<TabPanel>
-						<OrdersTable campaigns={userData.data.filter(
-							(campaign: any) => campaign.status === 'Closed'
-						)} />
-					</TabPanel>)}
-				</TabsWrapper>
+				<Graphs/>
 			</main>
 		</>
 	);

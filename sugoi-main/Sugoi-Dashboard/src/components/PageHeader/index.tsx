@@ -16,18 +16,15 @@ const PageHeader = (props: Props) => {
 	return (
 		<>
 			<Helmet>
-				<title>Qubo - {title}</title>
+				<title>Carbo by Qubo{title}</title>
 			</Helmet>
  
 			<div className="page-header">
-				<p> Qubo </p>
 				<Nav />
 				{breadcrumb && breadcrumb.length && (
 					<BreadCrumb sections={breadcrumb} />
 				)}
-				<div className="page-header__left">
-					<p>{callToAction}</p>
-				</div>
+				<p> Carbo <span>by Qubo </span></p>
 			</div>
 		</>
 	);

@@ -1,0 +1,55 @@
+@use '../../../styles/utils.scss';
+@import '../../../styles/guidelines.scss';
+
+.graphsWrapper {
+	margin-top: 40px;
+	width: 100%;
+	height: 100%;
+	display: grid;
+	align-items: flex-end;
+	justify-content: center;
+	grid-template-columns: 25% 40% 30%;
+	row-gap: 18px;
+	column-gap: 18px;
+}
+
+.topLeft {
+	display: flex;
+	width: 100%;
+	height: 100%;
+	justify-content: space-between;
+	align-items: space-between;
+	flex-wrap: wrap;
+	grid-column-start: 1;
+	grid-column-end: 2;
+	grid-row-start: 1;
+	grid-row-end: 2;
+}
+
+.bottomLeft {
+	grid-column-start: 1;
+	grid-column-end: 2;
+	grid-row-end: 3;
+	grid-row-start: 2;
+}
+
+.middle {
+	grid-column-start: 2;
+	grid-column-end: 3;
+	grid-row-start: 1;
+	grid-row-end: 3;
+}
+
+.topRight {
+	grid-column-start: 3;
+	grid-column-end: 4;
+	grid-row-start: 1;
+	grid-row-end: 2;
+}
+
+.bottomRight {
+	grid-column-start: 3;
+	grid-column-end: 4;
+	grid-row-start: 1;
+	grid-row-end: 3;
+}

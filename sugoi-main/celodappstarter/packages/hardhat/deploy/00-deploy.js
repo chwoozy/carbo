@@ -14,21 +14,12 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
   const { deploy } = deployments;
   const { deployer } = await getNamedAccounts();
 
-  await deploy("QuboMerchant", {
+  await deploy("CarboMerchant", {
     from: deployer,
-    args: ["xupeng", '0x667C2c3E6c0b3fDa899c62CF065Ef4c73FE99C02'],
+    args: ["FairPrice"],
     log: true,
   });
 
-<<<<<<< Updated upstream
-  await deploy("Greeter", {
-    from: deployer,
-    args: ["hello world"],
-    log: true,
-  });
-
-=======
->>>>>>> Stashed changes
   // Getting a previously deployed contract
   // const Greeter = new ethers.Contract("Greeter", deployer);
 
