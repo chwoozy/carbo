@@ -1,0 +1,67 @@
+@use '../../styles/utils.scss';
+@import '../../styles/guidelines.scss';
+
+.page-header {
+	padding-top: 10px;
+	background: $sage1;
+	align-items: center;
+	display: flex;
+	justify-content: flex-start;
+	position: fixed;
+	align-items: center;
+	top: 0;
+	left: 0;
+	z-index: 10000;
+	width: 100%;
+	min-height: max-content;
+	padding-right: 45px !important;
+	padding-left: 3rem !important;
+
+	p {
+		font-size: 16px;
+		text-align: center;
+		font-weight: $fontweight_bold;
+		margin-right: 3rem;
+	}
+
+	&__left {
+		display: flex;
+		justify-content: space-evenly;
+		align-items: center;
+	}
+
+	@media (max-width: 767px) {
+		display: block;
+	}
+
+	.ui.header {
+		display: flex;
+		// Override default top margin so less space between
+		// breadcrumbs and header.
+		margin-top: 1.2rem;
+		margin-right: 2rem;
+	}
+
+	@media screen and (min-width: 310px) and (max-width: 767px) {
+		float: left;
+		margin-bottom: 0;
+		padding: 0 16px;
+		width: 100%;
+
+		.ui.breadcrumb {
+			font-size: 0.9rem !important;
+		}
+	}
+}
+
+@media screen and (max-width: 1024px) {
+	.header-right-wrap {
+		.label {
+			font-size: 10px !important;
+		}
+	}
+
+	.page-header {
+		padding: 0 16px;
+	}
+}

@@ -1,0 +1,51 @@
+@use '../../styles/utils.scss';
+@import '../../styles/guidelines.scss';
+
+.brandNav {
+	// background-color: $teal1;
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	margin-top: 3.5rem;
+	height: 3rem;
+	padding: 2rem 4rem;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: flex-start;
+	box-shadow: $box_shadow_1;
+	z-index: 20000 !important;
+}
+
+.brandNavOptions {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+	margin-right: 6rem;
+}
+
+.logo {
+	font-size: 18px;
+	text-align: center;
+	font-weight: $fontweight_bold;
+}
+
+.navOption {
+	margin-right: 1rem;
+	padding: 2px 18px;
+	border-radius: 40px;
+	color: $teal11;
+	font-weight: $fontweight_semibold;
+	animation:cubic-bezier(1, 0, 0, 1) 0.3s;
+
+	&:hover {
+		background-color: $teal4;
+	}
+
+	&_selected {
+		background-color: $teal9 !important;
+		color: $prim_white;
+	}
+}
