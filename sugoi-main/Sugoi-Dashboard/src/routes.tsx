@@ -1,11 +1,10 @@
 import React from 'react';
 import { Route, Router, Switch } from 'react-router-dom';
 
-/* Pages */
-import BrandCampaignListPage from './pages/BrandCampaignListPage';
+/* Pages */	
 import CustomersPage from './pages/CustomersPage';
 import ProductsPage from './pages/ProductsPage';
-import OrdersPage from './pages/OrdersPage';
+import OrdersPage from './pages/DashboardPage';
 
 /* Styling */
 import { theme, Layout } from './styles/styling';

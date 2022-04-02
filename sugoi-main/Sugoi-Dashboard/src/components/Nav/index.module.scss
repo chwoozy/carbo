@@ -7,8 +7,8 @@
 	top: 0;
 	left: 0;
 	width: 100%;
-	margin-top: 3.5rem;
-	height: 3rem;
+	margin-top: 4rem;
+	height: 5rem;
 	padding: 2rem 4rem;
 	display: flex;
 	flex-direction: row;
@@ -34,10 +34,12 @@
 
 .navOption {
 	margin-right: 1rem;
-	padding: 2px 18px;
-	border-radius: 40px;
-	color: $teal11;
-	font-weight: $fontweight_semibold;
+	padding: 5px 18px;
+	border-radius: 7px;
+	color: $teal12;
+	font-size: 12px;
+	font-weight: $fontweight_medium;
+	text-transform: uppercase;
 	animation:cubic-bezier(1, 0, 0, 1) 0.3s;
 
 	&:hover {
@@ -45,7 +47,6 @@
 	}
 
 	&_selected {
-		background-color: $teal9 !important;
-		color: $prim_white;
+		background-color: $teal5 !important;
 	}
 }
