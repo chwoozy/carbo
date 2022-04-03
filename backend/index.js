@@ -10,9 +10,11 @@ const {
 } = require('./src/models');
 const app = express();
 const port = process.env.PORT || 3000;
+const cors = require('cors');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(cors());
 
 app.get('/', (req, res) => {
 	res.send('Hello World!');
@@ -69,13 +71,7 @@ app.get('/get_product_id_for_merchant', async (req, res) => {
 	res.json(products);
 });
 
-const totalEmission = async (merchant_id) => {
-	const products = await Product.findAll({
-		where: {
-			merchant_id,
-		},
-	});
-
+const totalEmission = async (products) => {
 	const totalEmission = (
 		await SupplyCarbonMetadata.findAll({
 			where: { product_id: products.map((product) => product.id) },
@@ -84,19 +80,18 @@ const totalEmission = async (merchant_id) => {
 	return totalEmission;
 };
 
-const totalQuantity = async (merchant_id) => {
-	const totalQuantity = (
-		await Product.findAll({
-			where: {
-				merchant_id,
-			},
-		})
-	).reduce((prev, curr) => prev + curr.quantity, 0);
+const totalQuantity = async (products) => {
+	const totalQuantity = products.reduce((prev, curr) => prev + curr.quantity, 0);
 	return totalQuantity;
 };
 
 app.get('/get_total_emission', async (req, res) => {
-	const emissions = await totalEmission(req.body.merchant_id);
+	const products = await Product.findAll({
+		where: {
+			merchant_id: req.body.merchant_id,
+		},
+	});
+	const emissions = await totalEmission(products);
 	res.json({ totalEmission: emissions });
 });
 
