@@ -10,8 +10,10 @@ module.exports = (sequelize, DataTypes) => {
 		 */
 		static associate(models) {
 			// define association here
-			supply_carbon_metadata.belongsTo(models.Product);
-			supply_carbon_metadata.belongsTo(models.SupplyChainParty);
+			supply_carbon_metadata.belongsTo(models.Product, { foreignKey: 'product_id' });
+			supply_carbon_metadata.belongsTo(models.SupplyChainParty, {
+				foreignKey: 'supply_chain_parties_id',
+			});
 		}
 	}
 	supply_carbon_metadata.init(
