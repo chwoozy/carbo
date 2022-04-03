@@ -14,9 +14,9 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
   const { deploy } = deployments;
   const { deployer } = await getNamedAccounts();
 
-  await deploy("CarboMerchant", {
+  await deploy("CarboToken", {
     from: deployer,
-    args: ["FairPrice"],
+    args: ["SuperMercat", "SUPER"],
     log: true,
   });
 
@@ -51,4 +51,4 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
   */
 };
 
-module.exports.tags = ["CarboMerchant"];
+module.exports.tags = ["CarboToken"];
