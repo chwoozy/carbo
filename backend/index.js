@@ -161,6 +161,7 @@ app.get('/emission_per_unit', async (req, res) => {
 		});
 		const emissions = await totalEmission(products);
 		const quantities = await totalQuantity(products);
+		console.log({ emissions, quantities });
 		const emission_per_unit = emissions / quantities;
 		res.json({
 			emission_per_unit,
