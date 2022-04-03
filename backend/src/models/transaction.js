@@ -9,7 +9,6 @@ module.exports = (sequelize, DataTypes) => {
 		 */
 		static associate(models) {
 			// define association here
-			const { SupplyCarbonMetadata } = models;
 			transaction.belongsTo(models.SupplyCarbonMetadata, {
 				foreignKey: 'supply_carbon_metadata_id',
 			});
