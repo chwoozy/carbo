@@ -92,7 +92,14 @@ const totalQuantity = async (merchant_id) => {
 				merchant_id,
 			},
 		})
-	).reduce((prev, curr) => prev + curr?.quantity, 0);
+	).reduce((prev, curr) => prev + curr.quantity, 0);
+	console.log(
+		await Product.findAll({
+			where: {
+				merchant_id,
+			},
+		})
+	);
 	console.log(totalQuantity);
 	return totalQuantity;
 };
