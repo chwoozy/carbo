@@ -162,9 +162,39 @@ app.get('/emission_per_unit', async (req, res) => {
 });
 
 // list of total number of products row inserted per day
-app.get('/number_of_products_per_day', async (req, res) => {});
+app.get('/number_of_products_per_day', async (req, res) => {
+	if (!req.body.merchant_id) {
+		res.json({ error: 'merchant id is undefined' });
+		return;
+	}
+	try {
+		const products = await Product.findAll({
+			where: {
+				merchant_id: req.body.merchant_id,
+			},
+		});
+
+		const result = {};
+
+		products.forEach((product) => {
+			const dateCreated = new Date(product.created_at).toDateString();
+
+			if (result[dateCreated]) {
+				result[dateCreated]++;
+			} else {
+				result[dateCreated] = 1;
+			}
+		});
+
+		res.json(result);
+	} catch (error) {
+		res.json({ error: error.message });
+	}
+});
 
 // total amount of carbon emissions per day
+
+// get all transaction
 
 app.listen(port, async () => {
 	console.log(`App listening on port ${port}`);
