@@ -9,7 +9,7 @@ import { useContractKit } from "@celo-tools/use-contractkit";
 import { useEffect, useState } from "react";
 import { SnackbarAction, useSnackbar } from "notistack";
 import { hexNumberToInteger, truncateAddress } from "@/utils";
-import { Storage } from "../../../hardhat/types/Storage";
+import { Storage } from "../../../hardhat/types/CarboToken";
 import { useQuery, gql } from "@apollo/client";
 import styles from "./index.module.scss";
 import ConnectWalletButton from '../ConnectWalletButton';
@@ -70,13 +70,25 @@ const MATERIAL_TYPE = [
   }
 ]
 
-// Fuel used: Number in KWH
-// Transportation_type: FLIGHT, SHIP, ROAD
-// Material_type: Glass Wool, 3148 CO2eg/kg, copper wire, 788 CO2eg/kg, Alumuminum Sheet, 2980CO2eg/kg
-// Material_amount: in KG
-// Supply chain party id: Integer
-// Product id: Integer
-export default function Checkout({ contractData, products }) {
+const SUPPLY_CHAIN_PARTY_ID = [
+  {
+    key: 'Production',
+    value: 2,
+    text: 'Production'
+  },
+  {
+    key: 'Manufacturer',
+    value: 3,
+    text: 'Manufacturer'
+  },
+  {
+    key: 'Retailer',
+    value: 4,
+    text: 'Retailer'
+  }
+]
+
+export default function Checkout({ sign, contractData, products, productId, setProductId }) {
   const { kit, address, network, performActions } = useContractKit();
   const totalPrice = products.reduce((acc, product) => acc + product.price, 0);
   const [contractLink, setContractLink] = useState<string | null>(null);
@@ -85,70 +97,40 @@ export default function Checkout({ contractData, products }) {
   const [energyType, setEnergyType] = useState<string | null>(null);
   const [fuelUsed, setFuelUsed] = useState<number | null>(null);
   const [transportationType, setTransportationType] = useState<string | null>(null);
+  const [quantity, setQuantity] = useState<number | null>(null);
   const [materialType, setMaterialType] = useState<string | null>(null);
   const [materialAmount, setMaterialAmount] = useState<number | null>(null);
   const [supplyChainPartyId, setSupplyChainPartyId] = useState<number | null>(null);
-  const [productId, setProductId] = useState<number | null>(null);
   
   const client = create('https://ipfs.infura.io:5001/api/v0');
-  const handleUploadToIpfs = async () => {
-    const testObj = {
-      test: 'hello'
-    }
-    console.log(testObj);
-    const created = await client.add(JSON.stringify(testObj));
+  
+  const handleUploadToIpfs = async (payload: any) => {
+    const created = await client.add(JSON.stringify(payload));
     const url = `https://ipfs.infura.io/ipfs/${created.path}`;
-    console.log(url);
-    
-    // const result = await ipfs.add(testObj);
-    // console.log(result);
+    return url;
   }
 
-  const contract = contractData
-    ? (new kit.web3.eth.Contract(
-        contractData.abi,
-        contractData.address
-      ) as any as Storage)
-    : null;
+  const ADDRESSES = {
+    2: '0x24C8Cd92C9F2025a6d293D7706307Bfed6d4d426',
+    3: '0x999950166b7a12236420287701c37DA9a9aA22A9',
+    4: '0xF65A8cf5414CF5A1Ba86267cdff66Ed8376e5329',
+  }
 
-  useEffect(() => {
-    if (contractData) {
-      setContractLink(`${network.explorer}/address/${contractData.address}`);
-    }
-  }, [network, contractData]);
-
-  const setStorage = async () => {
-    const productId = 7;
+  const createTransaction = async (ipfsUrl: string) => {
+    const nextStepAddress = ADDRESSES[supplyChainPartyId];
     try {
       await performActions(async (kit) => {
-        contract.once("purchaseRegistered", function(error, event) {
-          const arrayReturnData = event.returnValues[0];
-          let payload: any = {}
-          payload['id'] = arrayReturnData['orderID'];
-          payload['customer_addr'] = arrayReturnData['customerAddress'];
-          payload['merchant_addr'] = arrayReturnData['merchantAddress'];
-          payload['amount'] = hexNumberToInteger(arrayReturnData['orderAmount']);
-          payload['status'] = 'Active';
-          const expireDate = new Date(arrayReturnData['expiryDate'] * 1000);
-          const expireDateString = expireDate.toISOString().split('T')[0] + ' ' + expireDate.toTimeString().split(' ')[0];
-          payload['expiry'] = expireDateString;
-          payload['product_id'] = arrayReturnData['productID'];
-          payload['currency_name'] = 'CELO'
-          const url = 'https://cuboid-backend.herokuapp.com/customers/purchase';
-          axios.post(url, payload);
-        });
-
         const gasLimit = await contract.methods
-          .addPurchase(integerToHexNumber(totalPrice), productId).estimateGas({
+          .createTransaction(nextStepAddress, ipfsUrl).estimateGas({
             from: address,
-            value: integerToHexNumber(totalPrice)
+            value: 0
           });
         const result = await contract.methods
-          .addPurchase(integerToHexNumber(totalPrice), productId).send({
+          .createTransaction(nextStepAddress, ipfsUrl).send({
             from: address,
             gas: gasLimit,
             gasPrice: await kit.web3.eth.getGasPrice(),
-            value: integerToHexNumber(totalPrice)
+            value: 0
           });
         const variant = result.status == true ? "success" : "error";
         const url = `${network.explorer}/tx/${result.transactionHash}`;
@@ -172,10 +154,40 @@ export default function Checkout({ contractData, products }) {
         });
       });
     } catch (e) {
-      enqueueSnackbar(e.message, { variant: 'error' });
+      const data = e.data?.message
+      enqueueSnackbar(data, { variant: 'error' });
       console.log(e);
     }
-  };
+  }
+
+  const calculateTransaction = async () => {
+    const payload = {
+      energy_type: energyType,
+      fuel_used: fuelUsed,
+      transporation_type: transportationType,
+      material_amount: materialAmount,
+      supply_chain_parties_id: supplyChainPartyId,
+      product_id: productId,
+      quantity: quantity
+    }
+    const calculatedResponse = await axios.post("http://carbo-backend.herokuapp.com/calculate_transaction", payload);
+    const calculatedPayload = calculatedResponse.data;
+    const url = await handleUploadToIpfs(calculatedPayload);
+    createTransaction(url);
+  }
+
+  const contract = contractData
+    ? (new kit.web3.eth.Contract(
+        contractData.abi,
+        contractData.address
+      ) as any as Storage)
+    : null;
+
+  useEffect(() => {
+    if (contractData) {
+      setContractLink(`${network.explorer}/address/${contractData.address}`);
+    }
+  }, [network, contractData]);
 
   return (
     <div className={styles.checkoutWrapper}>
@@ -183,6 +195,15 @@ export default function Checkout({ contractData, products }) {
           Connect Wallet
         </h2>
         <ConnectWalletButton/>
+        <Input
+          className={styles.input}
+          label='Quantity'
+          placeholder="Quantity"
+          number
+          onChange={(event, data) => {
+            setQuantity(parseInt(data.value) || 0);
+          }}
+        />
         <div className={styles.dropdownWrapper}>
           <p>Energy Type</p>
           <Dropdown
@@ -215,7 +236,7 @@ export default function Checkout({ contractData, products }) {
           placeholder="Material Amount (in KG)"
           number
           onChange={(event, data) => {
-            setFuelUsed(parseInt(data.value) || 0);
+            setMaterialAmount(parseInt(data.value) || 0);
           }}
         />
         <div className={styles.dropdownWrapper}>
@@ -250,11 +271,26 @@ export default function Checkout({ contractData, products }) {
               }}
           />
         </div>
+        <div className={styles.dropdownWrapper}>
+          <p> Next Supply Chain Party</p>
+          <Dropdown
+            placeholder='Supply Chain Party'
+            fluid
+            search
+            selection
+            options={SUPPLY_CHAIN_PARTY_ID}
+            className={styles.dropdown}
+            onChange={
+              (event, data) => {
+                setSupplyChainPartyId(parseInt(data.value) || 0);
+              }}
+          />
+        </div>
         <Divider component="div" sx={{ m: 1 }} />
         <Button 
           sx={{ m: 1, marginLeft: 0 }}
           variant="contained" 
-          onClick={setStorage}
+          onClick={calculateTransaction}
           className={styles.checkoutButton}
         >
           Sign
