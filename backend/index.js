@@ -30,7 +30,7 @@ app.post('/create_merchant', async (req, res) => {
 		const merchant = await Merchant.create(merchant_data);
 		res.json(merchant);
 	} catch (error) {
-		res.send('Error');
+		res.json({ error: error.message });
 	}
 });
 
@@ -39,7 +39,7 @@ app.post('/create_product', async (req, res) => {
 		const product = await Product.create(req.body);
 		res.json(product);
 	} catch (error) {
-		res.send('Error');
+		res.json({ error: error.message });
 	}
 });
 
@@ -48,7 +48,7 @@ app.post('/create_supply_chain_party', async (req, res) => {
 		const supplyChainParty = await SupplyChainParty.create(req.body);
 		res.json(supplyChainParty);
 	} catch (error) {
-		res.send('Error');
+		res.json({ error: error.message });
 	}
 });
 
@@ -57,7 +57,7 @@ app.post('/calculate_transaction', async (req, res) => {
 		const supply_carbon_metadata = await SupplyCarbonMetadata.create(req.body);
 		res.json(supply_carbon_metadata);
 	} catch (error) {
-		res.send('Error');
+		res.json({ error: error.message });
 	}
 });
 
@@ -66,7 +66,7 @@ app.post('/store_transaction', async (req, res) => {
 		const transaction = await Transaction.create(req.body);
 		res.json(transaction);
 	} catch (error) {
-		res.send('Error');
+		res.json({ error: error.message });
 	}
 });
 
@@ -83,7 +83,7 @@ app.get('/get_supply_chain_parties_for_merchant', async (req, res) => {
 		});
 		res.json(supply_chain_parties);
 	} catch (error) {
-		res.send('Error');
+		res.json({ error: error.message });
 	}
 });
 
@@ -103,7 +103,7 @@ app.get('/get_product_id_for_merchant', async (req, res) => {
 		});
 		res.json(products);
 	} catch (error) {
-		res.send('Error');
+		res.json({ error: error.message });
 	}
 });
 
@@ -135,7 +135,7 @@ app.get('/get_total_emission', async (req, res) => {
 		const emissions = await totalEmission(products);
 		res.json({ totalEmission: emissions });
 	} catch (error) {
-		res.send('Error');
+		res.json({ error: error.message });
 	}
 });
 
@@ -157,7 +157,7 @@ app.get('/emission_per_unit', async (req, res) => {
 			emission_per_unit,
 		});
 	} catch (error) {
-		res.send('Error');
+		res.json({ error: error.message });
 	}
 });
 
