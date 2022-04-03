@@ -81,7 +81,6 @@ const totalEmission = async (merchant_id) => {
 			where: { product_id: products.map((product) => product.id) },
 		})
 	).reduce((prev, curr) => prev + curr.co2_emission, 0);
-	console.log({ totalEmission });
 	return totalEmission;
 };
 
@@ -93,12 +92,9 @@ const totalQuantity = async (merchant_id) => {
 			},
 		})
 	).reduce((prev, curr) => prev + curr.quantity, 0);
-	console.log({ totalQuantity });
-
 	return totalQuantity;
 };
-totalEmission(7);
-totalQuantity(7);
+
 app.get('/get_total_emission', async (req, res) => {
 	res.json({ totalEmission: totalEmission(req.body.merchant_id) });
 });
