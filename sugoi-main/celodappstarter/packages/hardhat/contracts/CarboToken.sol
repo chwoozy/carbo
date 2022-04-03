@@ -34,6 +34,9 @@ contract CarboToken is ERC721URIStorage, ERC721Enumerable, Ownable {
     uint256 productCount = 0;
     uint256 transactionCount = 0;
 
+    // Events
+    event tokenMint(address _contractAddress, uint256 tokenID);
+
     constructor(string memory merchantName, string memory merchantSymbol) ERC721(merchantName, merchantSymbol) {
         require(bytes(merchantName).length != 0, "Merchant name cannot be blank!");
         require(bytes(merchantSymbol).length != 0, "Merchant symbol cannot be blank!");
@@ -58,6 +61,7 @@ contract CarboToken is ERC721URIStorage, ERC721Enumerable, Ownable {
         mint(_nextParty);
         _setTokenURI(transactionCount, tokenUri);
         transactionCount++;
+        emit tokenMint(address(this), transactionCount);
         return transactionCount;
     }
 
