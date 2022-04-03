@@ -22,7 +22,9 @@ app.post('/create_merchant', async (req, res) => {
 });
 
 app.post('/create_product', async (req, res) => {
+	console.log(req.body);
 	const product = await Product.create(req.body);
+	console.log(product);
 	res.json(product);
 });
 
