@@ -1,11 +1,12 @@
 import * as React from "react";
 import styles from './index.module.scss';
-import { Tabs, Tab, Typography, Box, Link } from "@mui/material";
+import { Tabs, Tab, Typography, Box, Link, alertTitleClasses } from "@mui/material";
 import deployedContracts from "../../hardhat/deployments/hardhat_contracts.json";
 import { useContractKit } from "@celo-tools/use-contractkit";
 import ConnectWalletButton from '../components/ConnectWalletButton'
 import ProductsDisplay from "../components/ProductsDisplay";
 import Checkout from "../components/Checkout";
+import 'semantic-ui-css/semantic.min.css'
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -24,7 +25,6 @@ const PRODUCTS = [
 export default function App() {
   const { network } = useContractKit();
   const [value, setValue] = React.useState(0);
-
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
