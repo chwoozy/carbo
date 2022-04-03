@@ -72,7 +72,7 @@ app.post('/store_transaction', async (req, res) => {
 
 app.get('/get_supply_chain_parties_for_merchant', async (req, res) => {
 	if (!req.body.merchant_id) {
-		res.send('merchant id is undefined');
+		res.json({ error: 'merchant id is undefined' });
 		return;
 	}
 	try {
@@ -92,7 +92,7 @@ app.get('/get_supply_chain_parties_for_merchant', async (req, res) => {
  */
 app.get('/get_product_id_for_merchant', async (req, res) => {
 	if (!req.body.merchant_id) {
-		res.send('merchant id is undefined');
+		res.json({ error: 'merchant id is undefined' });
 		return;
 	}
 	try {
@@ -123,7 +123,7 @@ const totalQuantity = async (products) => {
 
 app.get('/get_total_emission', async (req, res) => {
 	if (!req.body.merchant_id) {
-		res.send('merchant id is undefined');
+		res.json({ error: 'merchant id is undefined' });
 		return;
 	}
 	try {
@@ -141,7 +141,7 @@ app.get('/get_total_emission', async (req, res) => {
 
 app.get('/emission_per_unit', async (req, res) => {
 	if (!req.body.merchant_id) {
-		res.send('merchant id is undefined');
+		res.json({ error: 'merchant id is undefined' });
 		return;
 	}
 	try {
