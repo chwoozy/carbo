@@ -278,8 +278,8 @@ app.get('/emission_per_product', async (req, res) => {
 		const newProducts = products
 			.map((product) => {
 				const productObject = product;
-				console.log(product);
-				const emissions = product.product_batches.reduce((prev, curr) => prev + curr.quantity, 0);
+
+				const emissions = product.product_batche.reduce((prev, curr) => prev + curr.quantity, 0);
 
 				productObject.total_emission = emissions;
 
