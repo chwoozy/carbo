@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
 		 */
 		static associate(models) {
 			// define association here
-			supply_chain_party.belongsTo(models.Merchant);
+			supply_chain_party.belongsTo(models.Merchant, { foreignKey: 'merchant_id' });
 		}
 	}
 	supply_chain_party.init(
