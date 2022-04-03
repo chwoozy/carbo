@@ -14,7 +14,7 @@ const cors = require('cors');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cors());
+app.use(cors({ allowedHeaders: 'Access-Control-Allow-Origin', origin: '*' }));
 
 app.get('/', (req, res) => {
 	res.send('Hello World!');
@@ -26,49 +26,79 @@ app.get('/', (req, res) => {
 
 app.post('/create_merchant', async (req, res) => {
 	const merchant_data = req.body;
-	const merchant = await Merchant.create(merchant_data);
-	res.json(merchant);
+	try {
+		const merchant = await Merchant.create(merchant_data);
+		res.json(merchant);
+	} catch (error) {
+		res.send('Error');
+	}
 });
 
 app.post('/create_product', async (req, res) => {
-	const product = await Product.create(req.body);
-	res.json(product);
+	try {
+		const product = await Product.create(req.body);
+		res.json(product);
+	} catch (error) {
+		res.send('Error');
+	}
 });
 
 app.post('/create_supply_chain_party', async (req, res) => {
-	const supplyChainParty = await SupplyChainParty.create(req.body);
-	res.json(supplyChainParty);
+	try {
+		const supplyChainParty = await SupplyChainParty.create(req.body);
+		res.json(supplyChainParty);
+	} catch (error) {
+		res.send('Error');
+	}
 });
 
 app.post('/calculate_transaction', async (req, res) => {
-	const supply_carbon_metadata = await SupplyCarbonMetadata.create(req.body);
-	res.json(supply_carbon_metadata);
+	try {
+		const supply_carbon_metadata = await SupplyCarbonMetadata.create(req.body);
+		res.json(supply_carbon_metadata);
+	} catch (error) {
+		res.send('Error');
+	}
 });
 
 app.post('/store_transaction', async (req, res) => {
-	const transaction = await Transaction.create(req.body);
-	res.json(transaction);
+	try {
+		const transaction = await Transaction.create(req.body);
+		res.json(transaction);
+	} catch (error) {
+		res.send('Error');
+	}
 });
 
 app.get('/get_supply_chain_parties_for_merchant', async (req, res) => {
-	const supply_chain_parties = await SupplyChainParty.findAll({
-		where: {
-			merchant_id: req.body.merchant_id,
-		},
-	});
-	res.json(supply_chain_parties);
+	if (!req.body.merchant_id) res.send('merchant id is undefined');
+	try {
+		const supply_chain_parties = await SupplyChainParty.findAll({
+			where: {
+				merchant_id: req.body.merchant_id,
+			},
+		});
+		res.json(supply_chain_parties);
+	} catch (error) {
+		res.send('Error');
+	}
 });
 
 /**
  * gets all the products that a merchant has
  */
 app.get('/get_product_id_for_merchant', async (req, res) => {
-	const products = await Product.findAll({
-		where: {
-			merchant_id: req.body.merchant_id,
-		},
-	});
-	res.json(products);
+	if (!req.body.merchant_id) res.send('merchant id is undefined');
+	try {
+		const products = await Product.findAll({
+			where: {
+				merchant_id: req.body.merchant_id,
+			},
+		});
+		res.json(products);
+	} catch (error) {
+		res.send('Error');
+	}
 });
 
 const totalEmission = async (products) => {
@@ -86,28 +116,43 @@ const totalQuantity = async (products) => {
 };
 
 app.get('/get_total_emission', async (req, res) => {
-	const products = await Product.findAll({
-		where: {
-			merchant_id: req.body.merchant_id,
-		},
-	});
-	const emissions = await totalEmission(products);
-	res.json({ totalEmission: emissions });
+	if (!req.body.merchant_id) res.send('merchant id is undefined');
+	try {
+		const products = await Product.findAll({
+			where: {
+				merchant_id: req.body.merchant_id,
+			},
+		});
+		const emissions = await totalEmission(products);
+		res.json({ totalEmission: emissions });
+	} catch (error) {
+		res.send('Error');
+	}
 });
 
 app.get('/emission_per_unit', async (req, res) => {
-	const products = await Product.findAll({
-		where: {
-			merchant_id: req.body.merchant_id,
-		},
-	});
-	const emissions = await totalEmission(products);
-	const quantities = await totalQuantity(products);
-	const emission_per_unit = emissions / quantities;
-	res.json({
-		emission_per_unit,
-	});
+	if (!req.body.merchant_id) res.send('merchant id is undefined');
+	try {
+		const products = await Product.findAll({
+			where: {
+				merchant_id: req.body.merchant_id,
+			},
+		});
+		const emissions = await totalEmission(products);
+		const quantities = await totalQuantity(products);
+		const emission_per_unit = emissions / quantities;
+		res.json({
+			emission_per_unit,
+		});
+	} catch (error) {
+		res.send('Error');
+	}
 });
+
+// list of total number of products row inserted per day
+app.get('/number_of_products_per_day', async (req, res) => {});
+
+// total amount of carbon emissions per day
 
 app.listen(port, async () => {
 	console.log(`App listening on port ${port}`);
