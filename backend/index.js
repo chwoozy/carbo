@@ -274,15 +274,18 @@ app.get('/get_transactions', async (req, res) => {
 			},
 		});
 
-		// const newTransactions = transactions.map(async (transaction) => {
-		// 	const productBatch = await ProductBatch.findByPk(transaction.product_batch_id);
+		const newTransactions = transactions.map(async (transaction) => {
+			const productBatch = await ProductBatch.findByPk(transaction.product_batch_id);
 
-		// 	return {
-		// 		...transaction,
-		// 		productBatch,
-		// 	};
-		// });
-		res.json(transactions);
+			return {
+				id: transaction.id,
+				type: transaction.type,
+				nft_address: transaction.nft_address,
+				nft_id: transaction.nft_id,
+				productBatch,
+			};
+		});
+		res.json(newTransactions);
 	} catch (error) {
 		res.json({ error: error.message });
 	}
