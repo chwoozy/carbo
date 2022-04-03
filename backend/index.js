@@ -12,9 +12,8 @@ const {
 const app = express();
 const port = process.env.PORT || 3000;
 const cors = require('cors');
-const product = require('./src/models/product');
 
-app.use(cors({ allowedHeaders: 'Access-Control-Allow-Origin', origin: '*' }));
+app.use(cors({ origin: '*' }));
 
 app.get('/', (req, res) => {
 	res.send('Hello World!');
