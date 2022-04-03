@@ -120,12 +120,12 @@ const totalEmission = async (products) => {
 };
 
 const totalQuantity = async (products) => {
-	const productBatches = ProductBatch.findAll({
+	const productBatches = await ProductBatch.findAll({
 		where: {
 			product_id: products.map((product) => product.id),
 		},
 	});
-	console.log(productBatches);
+
 	const totalQuantity = productBatches.reduce((prev, curr) => prev + curr.quantity, 0);
 	return totalQuantity;
 };
