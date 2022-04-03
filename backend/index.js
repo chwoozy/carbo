@@ -122,7 +122,7 @@ app.get('/get_product_quantity', async (req, res) => {
 			},
 			include: ProductBatch,
 		});
-		res.json({ product_quantity: totalQuantity(products) });
+		res.json({ product_quantity: await totalQuantity(products) });
 	} catch (error) {
 		res.json({ error: error.message });
 	}
