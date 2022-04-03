@@ -1,11 +1,11 @@
 import * as React from "react";
 import styles from './index.module.scss';
 import { Tabs, Tab, Typography, Box, Link, alertTitleClasses } from "@mui/material";
-import deployedContracts from "../../hardhat/deployments/hardhat_contracts.json";
+import deployedContracts from "../../../hardhat/deployments/hardhat_contracts.json";
 import { useContractKit } from "@celo-tools/use-contractkit";
-import ConnectWalletButton from '../components/ConnectWalletButton'
-import ProductsDisplay from "../components/ProductsDisplay";
-import Checkout from "../components/Checkout";
+import ConnectWalletButton from '../../components/ConnectWalletButton'
+import ProductsDisplay from "../../components/ProductsDisplay";
+import Checkout from "../../components/Checkout";
 import 'semantic-ui-css/semantic.min.css'
 import axios from "axios";
 
@@ -23,15 +23,26 @@ const PRODUCTS = [
     desc: 'Amazing monkey JPEG'
   },
 ]
-
 export default function App() {
   const { network } = useContractKit();
   const [value, setValue] = React.useState(0);
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
-
   const [productId, setProductId] = React.useState(0);
+
+  const [allTransactions, setAllTransactions] = React.useState([]);
+  const [activeTransaction, setActiveTransaction] = React.useState({});
+  
+  const getTransactions = async () => {
+    const response = await axios.get("http://carbo-backend.herokuapp.com/get_transactions?merchant_id=1 ");
+    const transactions = response.data;
+    setAllTransactions(transactions);
+  }
+
+  React.useEffect(() => {
+    getTransactions();
+  }, []);
 
   const contracts =
     deployedContracts[network?.chainId?.toString()]?.[
@@ -51,8 +62,8 @@ export default function App() {
 						</div>
 					</div>
 				</div>
-      <ProductsDisplay products={PRODUCTS} productId={productId} setProductId={setProductId}/>
-      <Checkout products={PRODUCTS} contractData={contracts?.CarboToken} productId={productId} setProductId={setProductId}/>
+      <ProductsDisplay allTransactions={allTransactions} sign={true} products={PRODUCTS} productId={productId} setProductId={setProductId}/>
+      <Checkout sign={true} products={PRODUCTS} contractData={contracts?.CarboToken} productId={productId} setProductId={setProductId}/>
     </div>
   );
 }
