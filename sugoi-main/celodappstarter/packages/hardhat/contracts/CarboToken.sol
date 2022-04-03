@@ -34,6 +34,9 @@ contract CarboToken is ERC721URIStorage, ERC721Enumerable, Ownable {
     uint256 productCount = 0;
     uint256 transactionCount = 0;
 
+    // Events
+    event tokenMint(address _contractAddress, uint256 tokenID);
+
     constructor(string memory merchantName, string memory merchantSymbol) ERC721(merchantName, merchantSymbol) {
         require(bytes(merchantName).length != 0, "Merchant name cannot be blank!");
         require(bytes(merchantSymbol).length != 0, "Merchant symbol cannot be blank!");
@@ -56,8 +59,9 @@ contract CarboToken is ERC721URIStorage, ERC721Enumerable, Ownable {
     function createTransaction(address _nextParty, string memory tokenUri) public returns (uint256 tokenID) {
         require(keccak256(bytes(_parties[msg.sender])) == keccak256(bytes("Production")), "Only production can create transaction");
         mint(_nextParty);
-        transactionCount++;
         _setTokenURI(transactionCount, tokenUri);
+        transactionCount++;
+        emit tokenMint(address(this), transactionCount);
         return transactionCount;
     }
 
@@ -84,7 +88,7 @@ contract CarboToken is ERC721URIStorage, ERC721Enumerable, Ownable {
     }
 
     function mint(address _to) public {
-        _safeMint(_to, 1);
+        _safeMint(_to, transactionCount);
     }
     
     // Overrides conflicting functions

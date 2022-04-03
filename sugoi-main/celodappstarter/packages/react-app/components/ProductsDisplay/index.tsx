@@ -7,29 +7,33 @@ import styles from './index.module.scss'
 import { createNameClaim } from "@celo/contractkit/lib/identity/claims/claim";
 
 interface Props {
+  allTransactions?: any[];
   products: {name: string, price: number, currency: string, desc: string}[]
+  productId: number;
+  sign: boolean;
+  setProductId: (id: number) => void;
 }
 export default function ProductsDisplay(props: Props) {
-  const { products } = props
+  const { products, productId, setProductId, allTransactions } = props
+  console.log(allTransactions);
   const [productsToSign, setProductsToSign] = useState([])
 
   const getProducts = async () => {
     /* add body to get request */
     const response = await axios.get("http://carbo-backend.herokuapp.com/get_product_id_for_merchant?merchant_id=1");
-    console.log(response.data);
-    // setProductsToSign(response.data)
+    const options = response.data?.map(product => {
+      return {
+        key: product.id,
+        value: product.id,
+        text: product.name
+      }
+    })
+    setProductsToSign(options)
   }
   const totalPrice = products.reduce((acc, curr) => acc + curr.price, 0).toFixed(2);
 
   React.useEffect(() => {
     getProducts()
-    setProductsToSign([
-      {
-        key: 'Product',
-        value: '1',
-        text: 'Product'
-      }
-    ])
   }, [])
   
   return (
@@ -47,9 +51,10 @@ export default function ProductsDisplay(props: Props) {
             selection
             options={productsToSign}
             className={styles.dropdown}
+            value={productId}
             onChange={
               (event, data) => {
-                // setEnergyType(data.value?.toString() || '');
+                setProductId(parseInt(data.value) || 0);
               }}
           />
         </div>

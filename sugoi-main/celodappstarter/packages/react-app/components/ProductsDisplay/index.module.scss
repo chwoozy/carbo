@@ -1,23 +1,56 @@
 @import '../../styles/guidelines.scss';
 
+.dropdown {
+    margin-top: 30px;
+    width: 300px !important;
+    /* Mobile View */
+    @media screen and (max-width: 1000px) {
+        width: 100% !important;
+    }
+        p {
+        margin-bottom: 10px !important;
+        margin-left: 10px;
+        font-size: 16px !important;
+        font-weight: $fontweight_semibold !important;
+        color: $prim_dark_2 !important;
+    }
+}
+.cubo {
+    font-size: 24px;
+    color: $teal11;
+    position: absolute;
+    font-weight: $fontweight_bold;
+    top: -30px;
+    right: -30px;
+
+    @media (min-width: 1000px) {
+        display: none;
+    }
+}
+
 .productsDisplay {
     width: 50%;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     align-items: flex-start;
-    height: 80%;
+    height: 80vh;
     border-right: 2px solid $sage6;
     position: relative;
 
     @media (max-width: 1000px) {
+        align-self: center;
         border-right: none;
-        width: 100%;
+        width: 80%;
+        padding-bottom: 50px;
+        margin-bottom: 50px;
+        border-bottom: 2px solid $grey_3;
+        height: max-content;
     }
 }
 
 .productsDisplayWrapper {
-    width: calc(100% - 200px);
+    width: calc(100%);
     padding-left: 150px;
     padding-right: 50px;
     display: flex;
@@ -29,15 +62,17 @@
 }
 
 .merchantName {
+    margin-bottom: 12px;
     color: $sage10;
     font-weight: $fontweight_semibold;
-    font-size: 16px;
+    font-size: 16px
 }
 
 .totalPrice {
     font-size: 42px;
     color: $teal12;
     font-weight: $fontweight_semibold;
+    line-height: 40px;
 }
 
 .products {
