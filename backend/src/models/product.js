@@ -12,6 +12,7 @@ module.exports = (sequelize, DataTypes) => {
 			// define association here
 			const { Merchant } = models;
 			product.belongsTo(Merchant, { foreignKey: 'merchant_id' });
+			product.hasOne(models.ProductBatch);
 		}
 	}
 	product.init(
