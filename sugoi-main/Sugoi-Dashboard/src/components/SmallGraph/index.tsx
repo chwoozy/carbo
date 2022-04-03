@@ -55,21 +55,21 @@ const SmallGraph = (props: Props) => {
     {
       name: 'Emissions Over Time',
       type: 'pie',
-      data: [{name: 'Emissions', y: 1}, {name: 'No Emissions', y: 2}]
+      data: [{name: 'Products with Net Zero Emissions', y: 7}, {name: 'Products with Emissions', y: 20}]
     }
   ];
   } else if (type === 'bar') {
     CHART_DATA = [{
-      name: 'Emissions Over Time',
+      name: 'Emissions Per Product',
       type: 'bar',
-      data: [1,2,3,4,5,6,7,8,9,10]
+      data: [1,5,12,60,65,80,90,91,99,100]
     }]
   
   } else {
     CHART_DATA = [{
       name: 'Emissions Over Time',
       type: 'line',
-      data: [1,2,3,4,5,6,7,8,9,10]
+      data: [1,20,33,140,150,180,202,212,230]
     }];
   }
   const dataWithAxisInfo = CHART_DATA.map((item: any, index) => {

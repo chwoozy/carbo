@@ -39,7 +39,7 @@ const Nav = () => {
 				`}
 				onClick={() => handleChangePage('/products')}
 			>
-				Products
+				Transactions
 			</button>
 			<button
 				className={`
@@ -48,7 +48,7 @@ const Nav = () => {
 				`}
 				onClick={() => handleChangePage('/customers')}
 			>
-				Customers
+				Supply Chain Partners
 			</button>
 		</section>
 	);

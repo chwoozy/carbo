@@ -15,9 +15,9 @@ const Graphs = (props: Props) => {
 		<section className={styles.graphsWrapper}>
 			<div className={styles.topLeft}>
 				<StatBox name="Total Emissions" stat={5000}/>
-				<StatBox name="Total Emissions" stat={5000}/>
-				<StatBox name="Total Emissions" stat={5000}/>
-				<StatBox name="Total Emissions" stat={5000}/>
+				<StatBox name="Total Products" stat={23}/>
+				<StatBox name="Emission Per Product" stat={3}/>
+				<StatBox name="Total Partners" stat={10}/>
 			</div>
 			<SmallGraph size="small" className={styles.bottomLeft}/>
 			<SmallGraph size="big" className={styles.middle}/>
