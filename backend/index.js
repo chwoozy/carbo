@@ -57,6 +57,15 @@ app.get('/get_supply_chain_parties_for_merchant', async (req, res) => {
 	res.json(supply_chain_parties);
 });
 
+app.get('/get_product_id_for_merchant', async (req, res) => {
+	const products = await Product.findAll({
+		where: {
+			merchant_id: req.body.merchant_id,
+		},
+	});
+	res.json(products);
+});
+
 app.listen(port, async () => {
 	console.log(`App listening on port ${port}`);
 	await sequelize.authenticate();
