@@ -71,14 +71,14 @@ app.post('/store_transaction', async (req, res) => {
 });
 
 app.get('/get_supply_chain_parties_for_merchant', async (req, res) => {
-	if (!req.body.merchant_id) {
+	if (!req.params.merchant_id) {
 		res.json({ error: 'merchant id is undefined' });
 		return;
 	}
 	try {
 		const supply_chain_parties = await SupplyChainParty.findAll({
 			where: {
-				merchant_id: req.body.merchant_id,
+				merchant_id: req.params.merchant_id,
 			},
 		});
 		res.json(supply_chain_parties);
@@ -91,14 +91,14 @@ app.get('/get_supply_chain_parties_for_merchant', async (req, res) => {
  * gets all the products that a merchant has
  */
 app.get('/get_product_id_for_merchant', async (req, res) => {
-	if (!req.body.merchant_id) {
+	if (!req.params.merchant_id) {
 		res.json({ error: 'merchant id is undefined' });
 		return;
 	}
 	try {
 		const products = await Product.findAll({
 			where: {
-				merchant_id: req.body.merchant_id,
+				merchant_id: req.params.merchant_id,
 			},
 		});
 		res.json(products);
@@ -122,14 +122,14 @@ const totalQuantity = async (products) => {
 };
 
 app.get('/get_total_emission', async (req, res) => {
-	if (!req.body.merchant_id) {
+	if (!req.params.merchant_id) {
 		res.json({ error: 'merchant id is undefined' });
 		return;
 	}
 	try {
 		const products = await Product.findAll({
 			where: {
-				merchant_id: req.body.merchant_id,
+				merchant_id: req.params.merchant_id,
 			},
 		});
 		const emissions = await totalEmission(products);
@@ -140,14 +140,14 @@ app.get('/get_total_emission', async (req, res) => {
 });
 
 app.get('/emission_per_unit', async (req, res) => {
-	if (!req.body.merchant_id) {
+	if (!req.params.merchant_id) {
 		res.json({ error: 'merchant id is undefined' });
 		return;
 	}
 	try {
 		const products = await Product.findAll({
 			where: {
-				merchant_id: req.body.merchant_id,
+				merchant_id: req.params.merchant_id,
 			},
 		});
 		const emissions = await totalEmission(products);
@@ -163,14 +163,14 @@ app.get('/emission_per_unit', async (req, res) => {
 
 // list of total number of products row inserted per day
 app.get('/number_of_products_per_day', async (req, res) => {
-	if (!req.body.merchant_id) {
+	if (!req.params.merchant_id) {
 		res.json({ error: 'merchant id is undefined' });
 		return;
 	}
 	try {
 		const products = await Product.findAll({
 			where: {
-				merchant_id: req.body.merchant_id,
+				merchant_id: req.params.merchant_id,
 			},
 		});
 
@@ -194,14 +194,14 @@ app.get('/number_of_products_per_day', async (req, res) => {
 
 // total amount of carbon emissions per day
 app.get('/carbon_emission_per_day', async (req, res) => {
-	if (!req.body.merchant_id) {
+	if (!req.params.merchant_id) {
 		res.json({ error: 'merchant id is undefined' });
 		return;
 	}
 	try {
 		const products = await Product.findAll({
 			where: {
-				merchant_id: req.body.merchant_id,
+				merchant_id: req.params.merchant_id,
 			},
 		});
 		const supplyCarbonMetadatas = await SupplyCarbonMetadata.findAll({
@@ -228,14 +228,14 @@ app.get('/carbon_emission_per_day', async (req, res) => {
 // get all transaction
 
 app.get('/get_transactions', async (req, res) => {
-	if (!req.body.merchant_id) {
+	if (!req.params.merchant_id) {
 		res.json({ error: 'merchant id is undefined' });
 		return;
 	}
 	try {
 		const products = await Product.findAll({
 			where: {
-				merchant_id: req.body.merchant_id,
+				merchant_id: req.params.merchant_id,
 			},
 		});
 		const supplyCarbonMetadatas = await SupplyCarbonMetadata.findAll({
@@ -252,6 +252,8 @@ app.get('/get_transactions', async (req, res) => {
 		res.json({ error: error.message });
 	}
 });
+
+//
 
 app.listen(port, async () => {
 	console.log(`App listening on port ${port}`);
