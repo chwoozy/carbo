@@ -30,7 +30,6 @@ export default function App() {
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
-
   const [productId, setProductId] = React.useState(0);
 
   const contracts =

@@ -88,7 +88,7 @@ const SUPPLY_CHAIN_PARTY_ID = [
   }
 ]
 
-export default function Checkout({ sign, contractData, products, productId, setProductId }) {
+export default function Checkout({ selectedTransactionToSign, sign, contractData, products, productId, setProductId }) {
   const { kit, address, network, performActions } = useContractKit();
   const totalPrice = products.reduce((acc, product) => acc + product.price, 0);
   const [contractLink, setContractLink] = useState<string | null>(null);
@@ -115,26 +115,29 @@ export default function Checkout({ sign, contractData, products, productId, setP
     3: '0x999950166b7a12236420287701c37DA9a9aA22A9',
     4: '0xF65A8cf5414CF5A1Ba86267cdff66Ed8376e5329',
   }
-
-  const storeTransaction = async (payload: any) => {
-    const response = await axios.post("http://carbo-backend.herokuapp.com/store_transaction", payload);
-  }
   
-  const createTransaction = async (ipfsUrl: string) => {
+  const createTransaction = async (ipfsUrl: string, payload: any) => {
     const nextStepAddress = ADDRESSES[supplyChainPartyId];
     try {
       await performActions(async (kit) => {
+        contract.once("tokenMint", function(error, event) {
+          const arrayReturnData = (event.returnValues);
+          let newPayload = payload;
+          payload['nft_address'] = arrayReturnData['_contractAddress'];
+          payload['nft_id'] = arrayReturnData['tokenID'];
+          const url = "http://carbo-backend.herokuapp.com/store_transaction";
+          axios.post(url, payload);
+        });
+
         const gasLimit = await contract.methods
           .createTransaction(nextStepAddress, ipfsUrl).estimateGas({
             from: address,
-            value: 0
           });
         const result = await contract.methods
           .createTransaction(nextStepAddress, ipfsUrl).send({
             from: address,
             gas: gasLimit,
             gasPrice: await kit.web3.eth.getGasPrice(),
-            value: 0
           });
         const hash = result.transactionHash;
         const variant = result.status == true ? "success" : "error";
@@ -160,8 +163,7 @@ export default function Checkout({ sign, contractData, products, productId, setP
       });
     } catch (e) {
       const data = e.data?.message
-      enqueueSnackbar(data, { variant: 'error' });
-      console.log(e);
+      enqueueSnackbar(e.message, { variant: 'error' });
     }
   }
 
@@ -178,7 +180,52 @@ export default function Checkout({ sign, contractData, products, productId, setP
     const calculatedResponse = await axios.post("http://carbo-backend.herokuapp.com/calculate_transaction", payload);
     const calculatedPayload = calculatedResponse.data;
     const url = await handleUploadToIpfs(calculatedPayload);
-    createTransaction(url);
+    createTransaction(url, payload);
+  }
+
+  const signTransaction = async () => {
+    if (sign) {
+      const nextStepAddress = ADDRESSES[supplyChainPartyId];
+      try {
+        await performActions(async (kit) => {
+          const gasLimit = await contract.methods
+            .holderSign(nextStepAddress, selectedTransactionToSign).estimateGas({
+              from: address,
+            });
+          const result = await contract.methods
+            .holderSign(nextStepAddress, selectedTransactionToSign).send({
+              from: address,
+              gas: gasLimit,
+              gasPrice: await kit.web3.eth.getGasPrice(),
+            });
+          const hash = result.transactionHash;
+          const variant = result.status == true ? "success" : "error";
+          const url = `${network.explorer}/tx/${result.transactionHash}`;
+          const action: SnackbarAction = (key) => (
+            <>
+              <Link href={url} target="_blank">
+                View in Explorer
+              </Link>
+              <Button
+                onClick={() => {
+                  closeSnackbar(key);
+                }}
+              >
+                X
+              </Button>
+            </>
+          );
+          enqueueSnackbar("Transaction sent", {
+            variant,
+            action,
+          });
+        });
+      } catch (e) {
+        const data = e.data?.message
+        enqueueSnackbar(data, { variant: 'error' });
+        console.log(e);
+      }
+    }
   }
 
   const contract = contractData
@@ -291,11 +338,10 @@ export default function Checkout({ sign, contractData, products, productId, setP
               }}
           />
         </div>
-        <Divider component="div" sx={{ m: 1 }} />
         <Button 
           sx={{ m: 1, marginLeft: 0 }}
           variant="contained" 
-          onClick={calculateTransaction}
+          onClick={sign ? signTransaction : calculateTransaction}
           className={styles.checkoutButton}
         >
           Sign

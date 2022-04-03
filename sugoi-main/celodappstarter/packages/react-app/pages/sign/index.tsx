@@ -39,6 +39,7 @@ export default function App() {
     const transactions = response.data;
     setAllTransactions(transactions);
   }
+  const [selectedTransactionToSign, setSelectedTransactionToSign] = React.useState('');
 
   React.useEffect(() => {
     getTransactions();
@@ -62,8 +63,8 @@ export default function App() {
 						</div>
 					</div>
 				</div>
-      <ProductsDisplay allTransactions={allTransactions} sign={true} products={PRODUCTS} productId={productId} setProductId={setProductId}/>
-      <Checkout sign={true} products={PRODUCTS} contractData={contracts?.CarboToken} productId={productId} setProductId={setProductId}/>
+      <ProductsDisplay setSelectedTransactionToSign={setSelectedTransactionToSign} selectedTransactionToSign={selectedTransactionToSign} allTransactions={allTransactions} sign={true} products={PRODUCTS} productId={productId} setProductId={setProductId}/>
+      <Checkout sign={true} selectedTransactionToSign={selectedTransactionToSign} products={PRODUCTS} contractData={contracts?.CarboToken} productId={productId} setProductId={setProductId}/>
     </div>
   );
 }

@@ -8,14 +8,15 @@ import { createNameClaim } from "@celo/contractkit/lib/identity/claims/claim";
 
 interface Props {
   allTransactions?: any[];
+  selectedTransactionToSign?: string;
+  setSelectedTransactionToSign?: (transactionHash: string) => void;
   products: {name: string, price: number, currency: string, desc: string}[]
   productId: number;
   sign: boolean;
   setProductId: (id: number) => void;
 }
 export default function ProductsDisplay(props: Props) {
-  const { products, productId, setProductId, allTransactions } = props
-  console.log(allTransactions);
+  const { products, productId, setProductId, allTransactions, sign } = props
   const [productsToSign, setProductsToSign] = useState([])
 
   const getProducts = async () => {
@@ -31,7 +32,12 @@ export default function ProductsDisplay(props: Props) {
     setProductsToSign(options)
   }
   const totalPrice = products.reduce((acc, curr) => acc + curr.price, 0).toFixed(2);
-
+  const transactionOptions = (allTransactions && allTransactions.length > 0) ? allTransactions.map(transaction => {
+    return {
+      key: transaction.id,
+      value: transaction.id,
+      text: `Transaction ${transaction.id}: ${transaction.productBatch.quantity} ${transaction.product.name}`
+    }}) : [];
   React.useEffect(() => {
     getProducts()
   }, [])
@@ -42,6 +48,23 @@ export default function ProductsDisplay(props: Props) {
           <p className={styles.cubo}>Carbo</p>
           <span className={styles.merchantName}>SIGNING FOR</span>
           <span className={styles.totalPrice}>XYZ Merchants</span>
+          {sign ?
+          <Dropdown
+            labeled
+            label="Transactions To Sign"
+            placeholder='Transactions'
+            fluid
+            search
+            selection
+            options={transactionOptions}
+            className={styles.dropdown}
+            value={productId}
+            onChange={
+              (event, data) => {
+                setProductId(parseInt(data.value) || 0);
+              }}
+          />
+          :
           <Dropdown
             labeled
             label="Products"
@@ -57,6 +80,7 @@ export default function ProductsDisplay(props: Props) {
                 setProductId(parseInt(data.value) || 0);
               }}
           />
+        }
         </div>
       </div>
   );
