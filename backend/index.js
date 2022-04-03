@@ -96,9 +96,13 @@ app.get('/get_total_emission', async (req, res) => {
 });
 
 app.get('/emission_per_unit', async (req, res) => {
-	const merchant_id = req.body.merchant_id;
-	const emissions = await totalEmission(merchant_id);
-	const quantities = await totalQuantity(merchant_id);
+	const products = await Product.findAll({
+		where: {
+			merchant_id: req.body.merchant_id,
+		},
+	});
+	const emissions = await totalEmission(products);
+	const quantities = await totalQuantity(products);
 	const emission_per_unit = emissions / quantities;
 	res.json({
 		emission_per_unit,
