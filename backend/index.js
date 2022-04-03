@@ -96,13 +96,17 @@ const totalQuantity = async (merchant_id) => {
 };
 
 app.get('/get_total_emission', async (req, res) => {
-	res.json({ totalEmission: await totalEmission(req.body.merchant_id) });
+	const totalEmission = await totalEmission(req.body.merchant_id);
+	res.json({ totalEmission });
 });
 
 app.get('/emission_per_unit', async (req, res) => {
 	const merchant_id = req.body.merchant_id;
+	const totalEmission = await totalEmission(req.body.merchant_id);
+	const totalQuantity = await totalQuantity(merchant_id);
+	const emission_per_unit = totalEmission / totalQuantity;
 	res.json({
-		emission_per_unit: (await totalEmission(merchant_id)) / (await totalQuantity(merchant_id)),
+		emission_per_unit,
 	});
 });
 
