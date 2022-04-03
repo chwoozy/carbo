@@ -49,8 +49,10 @@ app.post('/store_transaction', async (req, res) => {
 });
 
 app.get('/get_supply_chain_parties_for_merchant', async (req, res) => {
-	const supply_chain_parties = await SupplyChainParty.getAttributes({
-		merchant_id: req.merchant_id,
+	const supply_chain_parties = await SupplyChainParty.findAll({
+		where: {
+			merchant_id: req.body.merchant_id,
+		},
 	});
 	res.json(supply_chain_parties);
 });
