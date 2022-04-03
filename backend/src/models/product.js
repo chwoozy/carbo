@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
 		static associate(models) {
 			// define association here
 			const { Merchant } = models;
-			product.belongsTo(Merchant);
+			product.belongsTo(Merchant, { foreignKey: 'merchant_id' });
 		}
 	}
 	product.init(
