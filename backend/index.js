@@ -11,11 +11,11 @@ app.get('/', (req, res) => {
 	// const product = await Product.create({name: 'myproiduct', merchant_id: merchant.id})
 });
 
-app.post('/create_merchant', (req, res) => {
-  const merchant_data = req.body;
-  const merchant = await Merchant.create(merchant_data);
-  res.json(merchant)
-})
+app.post('/create_merchant', async (req, res) => {
+	const merchant_data = req.body;
+	const merchant = await Merchant.create(merchant_data);
+	res.json(merchant);
+});
 
 app.listen(port, async () => {
 	console.log(`App listening on port ${port}`);
