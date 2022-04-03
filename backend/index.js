@@ -110,6 +110,24 @@ app.get('/get_product_id_for_merchant', async (req, res) => {
 	}
 });
 
+app.get('/get_product_quantity', async (req, res) => {
+	if (req.query.merchant_id === undefined) {
+		res.json({ error: 'merchant id is undefined' });
+		return;
+	}
+	try {
+		const products = await Product.findAll({
+			where: {
+				merchant_id: req.query.merchant_id,
+			},
+			include: ProductBatch,
+		});
+		res.json({ product_quantity: totalQuantity(products) });
+	} catch (error) {
+		res.json({ error: error.message });
+	}
+});
+
 const totalEmission = async (products) => {
 	const totalEmission = (
 		await SupplyCarbonMetadata.findAll({
