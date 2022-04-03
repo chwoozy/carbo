@@ -13,6 +13,7 @@ app.get('/', (req, res) => {
 
 app.post('/create_merchant', async (req, res) => {
 	const merchant_data = req.body;
+	console.log(merchant_data);
 	const merchant = await Merchant.create(merchant_data);
 	res.json(merchant);
 });
