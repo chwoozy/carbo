@@ -76,19 +76,23 @@ const totalEmission = async (merchant_id) => {
 		},
 	});
 
-	const totalEmission = await SupplyCarbonMetadata.findAll({
-		where: { product_id: products.map((product) => product.id) },
-	}).reduce((prev, curr) => prev + curr.co2, 0);
+	const totalEmission = (
+		await SupplyCarbonMetadata.findAll({
+			where: { product_id: products.map((product) => product.id) },
+		})
+	).reduce((prev, curr) => prev + curr.co2, 0);
 	console.log(totalEmission);
 	return totalEmission;
 };
 
 const totalQuantity = async (merchant_id) => {
-	const totalQuantity = await Product.findAll({
-		where: {
-			merchant_id,
-		},
-	}).reduce((prev, curr) => prev + curr.quantity, 0);
+	const totalQuantity = (
+		await Product.findAll({
+			where: {
+				merchant_id,
+			},
+		})
+	).reduce((prev, curr) => prev + curr.quantity, 0);
 	console.log(totalQuantity);
 	return totalQuantity;
 };
