@@ -80,8 +80,7 @@ const totalEmission = async (merchant_id) => {
 		await SupplyCarbonMetadata.findAll({
 			where: { product_id: products.map((product) => product.id) },
 		})
-	).reduce((prev, curr) => prev + curr.getDataValue('co2'), 0);
-	console.log(totalEmission);
+	).reduce((prev, curr) => prev + curr.co2, 0);
 	return totalEmission;
 };
 
@@ -92,8 +91,7 @@ const totalQuantity = async (merchant_id) => {
 				merchant_id,
 			},
 		})
-	).reduce((prev, curr) => prev + curr.getDataValue('quantity'), 0);
-	console.log(totalQuantity);
+	).reduce((prev, curr) => prev + curr.quantity, 0);
 	return totalQuantity;
 };
 totalEmission(7);
