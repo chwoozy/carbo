@@ -96,6 +96,7 @@ const totalQuantity = async (merchant_id) => {
 };
 
 app.get('/get_total_emission', async (req, res) => {
+	console.log({ merchant_id: req.body.merchant_id, emission: totalEmission(req.body.merchant_id) });
 	res.json({ totalEmission: totalEmission(req.body.merchant_id) });
 });
 
