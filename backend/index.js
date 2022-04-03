@@ -263,7 +263,7 @@ app.get('/get_transactions', async (req, res) => {
 });
 
 //
-app.get('emission_per_product', async (req, res) => {
+app.get('/emission_per_product', async (req, res) => {
 	if (req.query.merchant_id === undefined) {
 		res.json({ error: 'merchant id is undefined' });
 		return;
