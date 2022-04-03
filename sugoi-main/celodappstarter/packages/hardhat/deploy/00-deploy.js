@@ -51,4 +51,4 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
   */
 };
 
-module.exports.tags = ["QuboMerchant"];
+module.exports.tags = ["CarboMerchant"];

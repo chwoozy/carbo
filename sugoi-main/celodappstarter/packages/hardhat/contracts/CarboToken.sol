@@ -7,8 +7,8 @@ import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "erc721a/contracts/ERC721A.sol";
 
 
-contract CarboManufacture is ERC721A, Ownable, ReentrancyGuard {
-    constructor() ERC721A("CarboManufacture", "MANUFACTURE") {}
+contract CarboToken is ERC721A, Ownable, ReentrancyGuard {
+    constructor() ERC721A("CarboToken", "CARBO") {}
 
     function mint(address _to) external {
         // _safeMint's second argument now takes in a quantity, not a tokenId.
