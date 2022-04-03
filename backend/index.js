@@ -76,7 +76,7 @@ app.post('/store_transaction', async (req, res) => {
 });
 
 app.get('/get_supply_chain_parties_for_merchant', async (req, res) => {
-	if (req.params.merchant_id !== undefined) {
+	if (req.params.merchant_id === undefined) {
 		res.json({ error: 'merchant id is undefined' });
 		return;
 	}
@@ -96,7 +96,7 @@ app.get('/get_supply_chain_parties_for_merchant', async (req, res) => {
  * gets all the products that a merchant has
  */
 app.get('/get_product_id_for_merchant', async (req, res) => {
-	if (req.params.merchant_id !== undefined) {
+	if (req.params.merchant_id === undefined) {
 		res.json({ error: 'merchant id is undefined' });
 		return;
 	}
@@ -132,7 +132,7 @@ const totalQuantity = async (products) => {
 };
 
 app.get('/get_total_emission', async (req, res) => {
-	if (req.params.merchant_id !== undefined) {
+	if (req.params.merchant_id === undefined) {
 		res.json({ error: 'merchant id is undefined' });
 		return;
 	}
@@ -150,7 +150,7 @@ app.get('/get_total_emission', async (req, res) => {
 });
 
 app.get('/emission_per_unit', async (req, res) => {
-	if (req.params.merchant_id !== undefined) {
+	if (req.params.merchant_id === undefined) {
 		res.json({ error: 'merchant id is undefined' });
 		return;
 	}
@@ -173,7 +173,7 @@ app.get('/emission_per_unit', async (req, res) => {
 
 // list of total number of products row inserted per day
 app.get('/number_of_products_per_day', async (req, res) => {
-	if (req.params.merchant_id !== undefined) {
+	if (req.params.merchant_id === undefined) {
 		res.json({ error: 'merchant id is undefined' });
 		return;
 	}
@@ -204,7 +204,7 @@ app.get('/number_of_products_per_day', async (req, res) => {
 
 // total amount of carbon emissions per day
 app.get('/carbon_emission_per_day', async (req, res) => {
-	if (req.params.merchant_id !== undefined) {
+	if (req.params.merchant_id === undefined) {
 		res.json({ error: 'merchant id is undefined' });
 		return;
 	}
@@ -238,7 +238,7 @@ app.get('/carbon_emission_per_day', async (req, res) => {
 // get all transaction
 
 app.get('/get_transactions', async (req, res) => {
-	if (req.params.merchant_id !== undefined) {
+	if (req.params.merchant_id === undefined) {
 		res.json({ error: 'merchant id is undefined' });
 		return;
 	}
