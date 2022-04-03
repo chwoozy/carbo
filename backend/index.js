@@ -17,9 +17,14 @@ app.get('/', (req, res) => {
 
 app.post('/create_merchant', async (req, res) => {
 	const merchant_data = req.body;
-	console.log(merchant_data);
 	const merchant = await Merchant.create(merchant_data);
 	res.json(merchant);
+});
+
+app.post('/create_product', async (req, res) => {
+	const product_data = req.body;
+	const product = await Product.create(product_data);
+	res.json(product);
 });
 
 app.listen(port, async () => {
