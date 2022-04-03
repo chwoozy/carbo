@@ -57,6 +57,9 @@ app.get('/get_supply_chain_parties_for_merchant', async (req, res) => {
 	res.json(supply_chain_parties);
 });
 
+/**
+ * gets all the products that a merchant has
+ */
 app.get('/get_product_id_for_merchant', async (req, res) => {
 	const products = await Product.findAll({
 		where: {
@@ -64,6 +67,40 @@ app.get('/get_product_id_for_merchant', async (req, res) => {
 		},
 	});
 	res.json(products);
+});
+
+const totalEmission = async (merchant_id) => {
+	const products = await Product.findAll({
+		where: {
+			merchant_id,
+		},
+	});
+
+	const totalEmission = await SupplyCarbonMetadata.findAll({
+		where: { product_id: products.map((product) => product.id) },
+	}).reduce((prev, curr) => prev + curr.co2, 0);
+	console.log(totalEmission);
+	return totalEmission;
+};
+
+const totalQuantity = async (merchant_id) => {
+	const totalQuantity = await Product.findAll({
+		where: {
+			merchant_id,
+		},
+	}).reduce((prev, curr) => prev + curr.quantity, 0);
+	console.log(totalQuantity);
+	return totalQuantity;
+};
+totalEmission(7);
+totalQuantity(7);
+app.get('/get_total_emission', async (req, res) => {
+	res.json({ totalEmission: totalEmission(req.body.merchant_id) });
+});
+
+app.get('/emission_per_unit', async (req, res) => {
+	const merchant_id = req.body.merchant_id;
+	res.json({ emission_per_unit: totalEmission(merchant_id) / totalQuantity(merchant_id) });
 });
 
 app.listen(port, async () => {
