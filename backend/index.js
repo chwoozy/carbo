@@ -110,6 +110,24 @@ app.get('/get_product_id_for_merchant', async (req, res) => {
 	}
 });
 
+app.get('/get_product_quantity', async (req, res) => {
+	if (req.query.merchant_id === undefined) {
+		res.json({ error: 'merchant id is undefined' });
+		return;
+	}
+	try {
+		const products = await Product.findAll({
+			where: {
+				merchant_id: req.query.merchant_id,
+			},
+			include: ProductBatch,
+		});
+		res.json({ product_quantity: await totalQuantity(products) });
+	} catch (error) {
+		res.json({ error: error.message });
+	}
+});
+
 const totalEmission = async (products) => {
 	const totalEmission = (
 		await SupplyCarbonMetadata.findAll({
@@ -120,11 +138,12 @@ const totalEmission = async (products) => {
 };
 
 const totalQuantity = async (products) => {
-	const productBatches = ProductBatch.findAll({
+	const productBatches = await ProductBatch.findAll({
 		where: {
 			product_id: products.map((product) => product.id),
 		},
 	});
+
 	const totalQuantity = productBatches.reduce((prev, curr) => prev + curr.quantity, 0);
 	return totalQuantity;
 };
@@ -234,7 +253,6 @@ app.get('/carbon_emission_per_day', async (req, res) => {
 });
 
 // get all transaction
-
 app.get('/get_transactions', async (req, res) => {
 	if (req.query.merchant_id === undefined) {
 		res.json({ error: 'merchant id is undefined' });
@@ -255,7 +273,18 @@ app.get('/get_transactions', async (req, res) => {
 				supply_carbon_metadata_id: supplyCarbonMetadatas.map((item) => item.id),
 			},
 		});
-		res.json(transactions);
+
+		const newTransactions = await Promise.all(
+			transactions.map(async (transaction) => {
+				const productBatch = await ProductBatch.findByPk(transaction.product_batch_id);
+
+				return {
+					...transaction,
+					productBatch,
+				};
+			})
+		);
+		res.json(newTransactions);
 	} catch (error) {
 		res.json({ error: error.message });
 	}
@@ -272,16 +301,14 @@ app.get('/emission_per_product', async (req, res) => {
 			where: {
 				merchant_id: req.query.merchant_id,
 			},
-			include: ProductBatch,
+			include: [ProductBatch, SupplyCarbonMetadata],
 		});
 
 		const newProducts = products
 			.map((product) => {
 				const productObject = product;
-
-				const emissions = product.product_batches.reduce((prev, curr) => prev + curr.quantity, 0);
-
-				productObject.total_emission = emissions;
+				console.log(product);
+				const quantities = product.product_batches.reduce((prev, curr) => prev + curr.quantity, 0);
 
 				return productObject;
 			})

@@ -12,6 +12,7 @@ module.exports = (sequelize, DataTypes) => {
 			transaction.belongsTo(models.SupplyCarbonMetadata, {
 				foreignKey: 'supply_carbon_metadata_id',
 			});
+			transaction.belongsTo(models.ProductBatch, { foreignKey: 'product_batch_id' });
 		}
 	}
 	transaction.init(
@@ -19,6 +20,8 @@ module.exports = (sequelize, DataTypes) => {
 			type: DataTypes.TEXT,
 			supply_carbon_metadata_id: DataTypes.INTEGER,
 			nft_address: DataTypes.TEXT,
+			nft_id: DataTypes.TEXT,
+			product_batch_id: DataTypes.INTEGER,
 		},
 		{
 			sequelize,

@@ -14,6 +14,9 @@ module.exports = (sequelize, DataTypes) => {
 			supply_carbon_metadata.belongsTo(models.SupplyChainParty, {
 				foreignKey: 'supply_chain_parties_id',
 			});
+			supply_carbon_metadata.hasOne(models.Transaction, {
+				foreignKey: 'supply_carbon_metadata_id',
+			});
 		}
 	}
 	supply_carbon_metadata.init(
