@@ -125,6 +125,7 @@ const totalQuantity = async (products) => {
 			product_id: products.map((product) => product.id),
 		},
 	});
+  console.log(productBatches)
 	const totalQuantity = productBatches.reduce((prev, curr) => prev + curr.quantity, 0);
 	return totalQuantity;
 };
@@ -280,7 +281,7 @@ app.get('/emission_per_product', async (req, res) => {
 				const productObject = product;
 				console.log(product);
 				const quantities = product.product_batches.reduce((prev, curr) => prev + curr.quantity, 0);
-
+        const 
 				return productObject;
 			})
 			.sort((a, b) => {
