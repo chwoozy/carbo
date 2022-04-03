@@ -22,8 +22,7 @@ app.post('/create_merchant', async (req, res) => {
 });
 
 app.post('/create_product', async (req, res) => {
-	const product_data = req.body;
-	const product = await Product.create(product_data);
+	const product = await Product.create(req.body);
 	res.json(product);
 });
 
