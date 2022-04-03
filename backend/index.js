@@ -227,6 +227,32 @@ app.get('/carbon_emission_per_day', async (req, res) => {
 
 // get all transaction
 
+app.get('/get_transactions', async (req, res) => {
+	if (!req.body.merchant_id) {
+		res.json({ error: 'merchant id is undefined' });
+		return;
+	}
+	try {
+		const products = await Product.findAll({
+			where: {
+				merchant_id: req.body.merchant_id,
+			},
+		});
+		const supplyCarbonMetadatas = await SupplyCarbonMetadata.findAll({
+			where: { product_id: products.map((product) => product.id) },
+		});
+
+		const transactions = await Transaction.findAll({
+			where: {
+				supply_carbon_metadata_id: supplyCarbonMetadatas.map((item) => item.id),
+			},
+		});
+		res.json(transactions);
+	} catch (error) {
+		res.json({ error: error.message });
+	}
+});
+
 app.listen(port, async () => {
 	console.log(`App listening on port ${port}`);
 	await sequelize.authenticate();
