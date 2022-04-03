@@ -12,6 +12,7 @@ const {
 const app = express();
 const port = process.env.PORT || 3000;
 const cors = require('cors');
+const product = require('./src/models/product');
 
 app.use(cors({ allowedHeaders: 'Access-Control-Allow-Origin', origin: '*' }));
 
@@ -262,6 +263,42 @@ app.get('/get_transactions', async (req, res) => {
 });
 
 //
+app.get('emission_per_product', async (req, res) => {
+	if (req.query.merchant_id === undefined) {
+		res.json({ error: 'merchant id is undefined' });
+		return;
+	}
+	try {
+		const products = await Product.findAll({
+			where: {
+				merchant_id: req.query.merchant_id,
+			},
+			include: ProductBatch,
+		});
+
+		const newProducts = products
+			.map((product) => {
+				const productObject = product;
+
+				const emissions = product.product_batches.reduce((prev, curr) => prev + curr.quantity, 0);
+
+				productObject.total_emission = emissions;
+
+				return productObject;
+			})
+			.sort((a, b) => {
+				if (a.total_emission < b.total_emission) {
+					return -1;
+				} else if (a.total_emission < b.total_emission) {
+					return 1;
+				}
+				return 0;
+			});
+		res.json(newProducts);
+	} catch (error) {
+		res.json({ error: error.message });
+	}
+});
 
 app.listen(port, async () => {
 	console.log(`App listening on port ${port}`);
