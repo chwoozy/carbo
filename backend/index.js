@@ -285,6 +285,7 @@ app.get('/get_transactions', async (req, res) => {
 				productBatch,
 			};
 		});
+		console.log(newTransactions);
 		res.json(newTransactions);
 	} catch (error) {
 		res.json({ error: error.message });
