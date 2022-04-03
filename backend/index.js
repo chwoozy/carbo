@@ -177,7 +177,7 @@ app.get('/number_of_products_per_day', async (req, res) => {
 		const result = {};
 
 		products.forEach((product) => {
-			const dateCreated = new Date(product.created_at).toDateString();
+			const dateCreated = new Date(product.createdAt).toDateString();
 
 			if (result[dateCreated]) {
 				result[dateCreated]++;
