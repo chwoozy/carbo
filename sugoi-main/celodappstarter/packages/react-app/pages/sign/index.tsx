@@ -35,7 +35,7 @@ export default function App() {
   const [activeTransaction, setActiveTransaction] = React.useState({});
   
   const getTransactions = async () => {
-    const response = await axios.get("http://carbo-backend.herokuapp.com/get_transactions?merchant_id=1");
+    const response = await axios.get("http://carbo-backend.herokuapp.com/get_transactions?merchant_id=1 ");
     const transactions = response.data;
     setAllTransactions(transactions);
   }

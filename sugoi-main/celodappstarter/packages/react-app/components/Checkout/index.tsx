@@ -116,6 +116,10 @@ export default function Checkout({ sign, contractData, products, productId, setP
     4: '0xF65A8cf5414CF5A1Ba86267cdff66Ed8376e5329',
   }
 
+  const storeTransaction = async (payload: any) => {
+    const response = await axios.post("http://carbo-backend.herokuapp.com/store_transaction", payload);
+  }
+  
   const createTransaction = async (ipfsUrl: string) => {
     const nextStepAddress = ADDRESSES[supplyChainPartyId];
     try {
@@ -132,6 +136,7 @@ export default function Checkout({ sign, contractData, products, productId, setP
             gasPrice: await kit.web3.eth.getGasPrice(),
             value: 0
           });
+        const hash = result.transactionHash;
         const variant = result.status == true ? "success" : "error";
         const url = `${network.explorer}/tx/${result.transactionHash}`;
         const action: SnackbarAction = (key) => (

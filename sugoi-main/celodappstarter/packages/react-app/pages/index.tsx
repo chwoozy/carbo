@@ -51,7 +51,7 @@ export default function App() {
 						</div>
 					</div>
 				</div>
-      <ProductsDisplay allTransactions={allTransactions} products={PRODUCTS} productId={productId} setProductId={setProductId}/>
+      <ProductsDisplay products={PRODUCTS} productId={productId} setProductId={setProductId}/>
       <Checkout products={PRODUCTS} contractData={contracts?.CarboToken} productId={productId} setProductId={setProductId}/>
     </div>
   );
