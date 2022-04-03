@@ -48,6 +48,13 @@ app.post('/store_transaction', async (req, res) => {
 	res.json(transaction);
 });
 
+app.get('/get_supply_chain_parties_for_merchant', async (req, res) => {
+	const supply_chain_parties = await SupplyChainParty.getAttributes({
+		merchant_id: req.merchant_id,
+	});
+	res.json(supply_chain_parties);
+});
+
 app.listen(port, async () => {
 	console.log(`App listening on port ${port}`);
 	await sequelize.authenticate();
