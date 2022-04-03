@@ -1,6 +1,13 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const { sequelize, Transaction, Merchant, Product } = require('./src/models');
+const {
+	sequelize,
+	Transaction,
+	Merchant,
+	Product,
+	SupplyChainParty,
+	SupplyCarbonMetadata,
+} = require('./src/models');
 const app = express();
 const port = process.env.PORT || 3000;
 
@@ -22,10 +29,23 @@ app.post('/create_merchant', async (req, res) => {
 });
 
 app.post('/create_product', async (req, res) => {
-	console.log(req.body);
 	const product = await Product.create(req.body);
-	console.log(product);
 	res.json(product);
+});
+
+app.post('/create_supply_chain_party', async (req, res) => {
+	const supplyChainParty = await SupplyChainParty.create(req.body);
+	res.json(supplyChainParty);
+});
+
+app.post('/calculate_transaction', async (req, res) => {
+	const supply_carbon_metadata = await SupplyCarbonMetadata.create(req.body);
+	res.json(supply_carbon_metadata);
+});
+
+app.post('/store_transaction', async (req, res) => {
+	const transaction = await Transaction.create(req.body);
+	res.json(transaction);
 });
 
 app.listen(port, async () => {
