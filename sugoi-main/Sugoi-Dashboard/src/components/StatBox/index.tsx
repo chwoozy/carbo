@@ -7,7 +7,7 @@ export const StyledStat = styled('div', {
 	width: 'max-content',
 	height: 'max-content',
 	minHeight: '100px',
-	minWidth: '100px',
+	minWidth: '160px',
 	borderRadius: '7px',
 	display: 'flex',
 	padding: '$small',

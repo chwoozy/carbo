@@ -18,8 +18,6 @@ const Graphs = (props: Props) => {
 				<StatBox name="Total Emissions" stat={5000}/>
 				<StatBox name="Total Emissions" stat={5000}/>
 				<StatBox name="Total Emissions" stat={5000}/>
-				<StatBox name="Total Emissions" stat={5000}/>
-				<StatBox name="Total Emissions" stat={5000}/>
 			</div>
 			<SmallGraph size="small" className={styles.bottomLeft}/>
 			<SmallGraph size="big" className={styles.middle}/>
