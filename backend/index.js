@@ -179,7 +179,6 @@ app.get('/emission_per_unit', async (req, res) => {
 		});
 		const emissions = await totalEmission(products);
 		const quantities = await totalQuantity(products);
-		console.log({ emissions, quantities });
 		const emission_per_unit = emissions / quantities;
 		res.json({
 			emission_per_unit,
@@ -254,7 +253,6 @@ app.get('/carbon_emission_per_day', async (req, res) => {
 });
 
 // get all transaction
-
 app.get('/get_transactions', async (req, res) => {
 	if (req.query.merchant_id === undefined) {
 		res.json({ error: 'merchant id is undefined' });
@@ -275,7 +273,16 @@ app.get('/get_transactions', async (req, res) => {
 				supply_carbon_metadata_id: supplyCarbonMetadatas.map((item) => item.id),
 			},
 		});
-		res.json(transactions);
+
+		const newTransactions = transactions.map(async (transaction) => {
+			const productBatch = await ProductBatch.findByPk(transaction.product_batch_id);
+
+			return {
+				...transaction,
+				productBatch,
+			};
+		});
+		res.json(newTransactions);
 	} catch (error) {
 		res.json({ error: error.message });
 	}
